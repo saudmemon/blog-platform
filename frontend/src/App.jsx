@@ -6,10 +6,10 @@ import EditorPage from './pages/EditorPage';
 
 // Simple 404 Not Found Component
 const NotFound = () => (
-  <div className="container" style={{ padding: '4rem', textAlign: 'center' }}>
-    <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>404</h1>
+  <div className="container" style={{ padding: '3rem 1rem', textAlign: 'center' }}>
+    <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--secondary)' }}>404</h1>
     <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Page not found</p>
-    <a href="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>← Back to Home</a>
+    <a href="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600, fontSize: '1rem' }}>← Back to Home</a>
   </div>
 );
 

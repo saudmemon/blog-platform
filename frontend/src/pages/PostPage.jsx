@@ -42,8 +42,8 @@ const PostPage = () => {
         }
     };
 
-    if (loading) return <div className="container" style={{ padding: '4rem', textAlign: 'center' }}><h2>Loading story...</h2></div>;
-    if (!post) return <div className="container" style={{ padding: '4rem', textAlign: 'center' }}><h2>Post not found</h2></div>;
+    if (loading) return <div className="container loading"><h2>Loading story...</h2></div>;
+    if (!post) return <div className="container empty-state"><h2>Post not found</h2></div>;
 
     // Helper to determine if content is HTML or Markdown
     const isHtml = (str) => str && /<[a-z][\s\S]*>/i.test(str);
@@ -51,12 +51,12 @@ const PostPage = () => {
     return (
         <div className="container">
             <div className="post-detail">
-                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
+                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '0.95rem' }}>
                     <ArrowLeft size={18} /> Back to stories
                 </Link>
 
                 <header className="post-detail-header">
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
                         {post.tags?.map(tag => (
                             <span key={tag} className="post-tag">{tag}</span>
                         ))}
@@ -101,43 +101,24 @@ const PostPage = () => {
                 </div>
 
                 {showDeleteConfirm && (
-                    <div style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 1000,
-                    }}>
-                        <div style={{
-                            backgroundColor: 'var(--bg-card)',
-                            padding: '2rem',
-                            borderRadius: '12px',
-                            maxWidth: '400px',
-                            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
-                        }}>
-                            <h2 style={{ marginBottom: '1rem', color: 'var(--text)' }}>Delete Post?</h2>
+                    <div className="modal-overlay">
+                        <div className="modal">
+                            <h2>Delete Post?</h2>
                             <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
                                 This action cannot be undone. The post and its associated image will be permanently deleted.
                             </p>
-                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                            <div className="modal-buttons">
                                 <button
                                     onClick={() => setShowDeleteConfirm(false)}
                                     disabled={deleting}
-                                    className="btn-icon"
-                                    style={{ background: 'rgba(255,255,255,0.1)', color: 'var(--text-muted)', padding: '0.6rem 1.2rem' }}
+                                    className="btn-cancel"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleDelete}
                                     disabled={deleting}
-                                    className="btn-icon btn-delete"
-                                    style={{ background: '#ef4444', color: 'white', padding: '0.6rem 1.2rem' }}
+                                    className="btn-confirm"
                                 >
                                     {deleting ? 'Deleting...' : 'Delete'}
                                 </button>

@@ -24,10 +24,10 @@ const HomePage = () => {
         fetchPosts();
     }, []);
 
-    if (loading) return <div className="container" style={{ padding: '4rem', textAlign: 'center' }}><h2>Loading stories...</h2></div>;
+    if (loading) return <div className="container loading"><h2>Loading stories...</h2></div>;
 
     return (
-        <div className="container" style={{ paddingBottom: '4rem' }}>
+        <div className="container" style={{ paddingBottom: '2rem' }}>
             <header className="hero">
                 <h1>Share Your Story With The World</h1>
                 <p>A place to write, read and connect. Discover insightful perspectives from writers on any topic.</p>
@@ -45,8 +45,8 @@ const HomePage = () => {
                         )}
 
                         {!post.coverImage && (
-                            <div style={{ height: '200px', background: 'linear-gradient(45deg, #1e293b, #334155)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <span style={{ color: '#475569', fontWeight: 600 }}>NexusBlog</span>
+                            <div style={{ height: '200px', background: 'linear-gradient(45deg, #3d2823, #5a3d35)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span style={{ color: '#b8a8a0', fontWeight: 600 }}>NexusBlog</span>
                             </div>
                         )}
                         <div className="post-content">
@@ -56,7 +56,7 @@ const HomePage = () => {
 
 
                             <div className="post-footer">
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem' }}>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                                         <User size={14} /> {post.author}
                                     </span>
@@ -64,7 +64,7 @@ const HomePage = () => {
                                         <Calendar size={14} /> {new Date(post.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>
-                                <Link to={`/post/${post._id}`} style={{ color: 'var(--primary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                                <Link to={`/post/${post._id}`} style={{ color: 'var(--secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                                     Read <ArrowRight size={16} />
                                 </Link>
                             </div>
@@ -74,9 +74,9 @@ const HomePage = () => {
             </div>
 
             {posts.length === 0 && (
-                <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+                <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                     <p style={{ color: 'var(--text-muted)' }}>No posts yet. Be the first to write one!</p>
-                    <Link to="/create" className="btn-create" style={{ marginTop: '1rem', display: 'inline-block' }}>Create Post</Link>
+                    <Link to="/create" className="btn-create" style={{ marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>Create Post</Link>
                 </div>
             )}
         </div>

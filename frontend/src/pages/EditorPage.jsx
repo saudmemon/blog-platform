@@ -160,76 +160,59 @@ const EditorPage = () => {
     };
 
     return (
-        <div className="container" style={{ paddingBottom: '4rem' }}>
-            <div className="editor-container" style={{ animation: 'fadeIn 0.5s ease-out' }}>
-                <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <div style={{ background: 'var(--primary)', color: 'white', padding: '0.8rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)' }}>
-                            <FileText size={24} />
+        <div className="container" style={{ paddingBottom: '2rem' }}>
+            <div className="editor-container">
+                <div className="editor-header" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                        <div style={{ background: 'var(--primary)', color: 'white', padding: '0.6rem', borderRadius: '8px' }}>
+                            <FileText size={20} />
                         </div>
-                        <div>
-                            <h1 style={{ fontSize: '1.8rem', fontWeight: 700 }}>{isEditMode ? 'Edit Story' : 'New Story'}</h1>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Share your thoughts with the community</p>
-                        </div>
+                        <h1>{isEditMode ? 'Edit Story' : 'New Story'}</h1>
                     </div>
-                    <button onClick={() => navigate(-1)} className="btn-icon" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', padding: '0.6rem 1.2rem', borderRadius: '10px' }}>
-                        <X size={18} /> Cancel
-                    </button>
-                </header>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Share your thoughts with the community</p>
+                </div>
 
-                <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px', background: 'var(--bg-card)', border: '1px solid var(--glass-border)' }}>
+                <form onSubmit={handleSubmit} style={{ background: 'var(--bg-card)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255, 227, 153, 0.1)' }}>
                     {errors.submit && (
-                        <div style={{
-                            background: '#fee2e2',
-                            color: '#991b1b',
-                            padding: '1rem',
-                            borderRadius: '8px',
-                            marginBottom: '1.5rem',
-                            border: '1px solid #fecaca'
-                        }}>
+                        <div className="file-error" style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', borderColor: 'var(--error)' }}>
                             {errors.submit}
                         </div>
                     )}
 
                     <div className="form-group">
-                        <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Type size={16} /> Story Title
-                        </label>
+                        <label>Story Title</label>
                         <input
                             type="text"
-                            className="form-input"
-                            style={{ fontSize: '1.2rem', padding: '1rem', fontWeight: 500, borderColor: errors.title ? '#ef4444' : 'var(--input-border)' }}
                             placeholder="Give your story a catchy title..."
                             value={title}
                             onChange={(e) => {
                                 setTitle(e.target.value);
                                 if (errors.title) setErrors({ ...errors, title: '' });
                             }}
+                            style={{ borderColor: errors.title ? 'var(--error)' : '' }}
                         />
-                        {errors.title && <span style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.5rem' }}>{errors.title}</span>}
+                        {errors.title && <div className="form-error">{errors.title}</div>}
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div className="form-group">
-                            <label className="form-label">Author Name</label>
+                            <label>Author Name</label>
                             <input
                                 type="text"
-                                className="form-input"
-                                style={{ borderColor: errors.author ? '#ef4444' : 'var(--input-border)' }}
                                 placeholder="Who's writing this?"
                                 value={author}
                                 onChange={(e) => {
                                     setAuthor(e.target.value);
                                     if (errors.author) setErrors({ ...errors, author: '' });
                                 }}
+                                style={{ borderColor: errors.author ? 'var(--error)' : '' }}
                             />
-                            {errors.author && <span style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.5rem' }}>{errors.author}</span>}
+                            {errors.author && <div className="form-error">{errors.author}</div>}
                         </div>
                         <div className="form-group">
-                            <label className="form-label">Tags (comma separated)</label>
+                            <label>Tags (comma separated)</label>
                             <input
                                 type="text"
-                                className="form-input"
                                 placeholder="tech, lifestyle, tutorial..."
                                 value={tags}
                                 onChange={(e) => setTags(e.target.value)}
@@ -237,71 +220,58 @@ const EditorPage = () => {
                         </div>
                     </div>
 
+                    @media (max-width: 768px) {
+                        grid-template-columns: 1fr;
+                    }
+
                     <div className="form-group">
-                        <label className="form-label">Cover Image</label>
+                        <label>Cover Image</label>
                         {fileError && (
-                            <div style={{
-                                background: '#fee2e2',
-                                color: '#991b1b',
-                                padding: '0.75rem',
-                                borderRadius: '6px',
-                                marginBottom: '1rem',
-                                fontSize: '0.875rem',
-                                border: '1px solid #fecaca'
-                            }}>
+                            <div className="file-error">
                                 {fileError}
                             </div>
                         )}
-                        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                            <label className="form-input" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', justifyContent: 'center', borderStyle: 'dashed', height: '120px', background: 'rgba(255,255,255,0.02)' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+                            <label className="image-upload" style={{ flex: 1, width: '100%' }}>
                                 <ImageIcon size={24} style={{ color: 'var(--primary)' }} />
-                                <div style={{ textAlign: 'left' }}>
-                                    <div style={{ fontWeight: 600 }}>{image ? image.name : 'Upload Header Image'}</div>
-                                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>JPG, PNG or WEBP (Max 5MB)</div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontWeight: 600, marginTop: '0.5rem' }}>{image ? image.name : 'Upload Header Image'}</div>
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>JPG, PNG or WEBP (Max 5MB)</div>
                                 </div>
                                 <input type="file" hidden onChange={handleImageChange} accept="image/jpeg,image/png,image/webp" />
                             </label>
                             {imagePreview && (
-                                <div style={{ position: 'relative' }}>
-                                    <img src={imagePreview} alt="Preview" style={{ width: '180px', height: '120px', objectFit: 'cover', borderRadius: '12px', border: '2px solid var(--primary)' }} />
-                                </div>
+                                <img src={imagePreview} alt="Preview" className="image-preview" />
                             )}
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Body Content</label>
+                        <label>Body Content</label>
                         <textarea
-                            className="form-input"
-                            style={{ height: '400px', fontFamily: 'inherit', resize: 'vertical', lineHeight: '1.6', fontSize: '1.1rem', borderColor: errors.content ? '#ef4444' : 'var(--input-border)' }}
                             placeholder="Tell your story... (Supports Markdown)"
                             value={content}
                             onChange={(e) => {
                                 setContent(e.target.value);
                                 if (errors.content) setErrors({ ...errors, content: '' });
                             }}
+                            style={{ borderColor: errors.content ? 'var(--error)' : '', minHeight: '250px' }}
                         />
-                        {errors.content && <span style={{ color: '#ef4444', fontSize: '0.875rem', marginTop: '0.5rem' }}>{errors.content}</span>}
-                        <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+                        {errors.content && <div className="form-error">{errors.content}</div>}
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem', display: 'block' }}>
                             {content.length}/10000 characters
                         </span>
                     </div>
 
-                    <button type="submit" className="btn-submit" disabled={loading} style={{
-                        background: 'linear-gradient(135deg, var(--primary), var(--primary-hover))',
-                        boxShadow: '0 8px 25px rgba(99, 102, 241, 0.4)',
-                        padding: '1.2rem',
-                        fontSize: '1.1rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.8rem',
-                        opacity: loading ? 0.6 : 1,
-                        cursor: loading ? 'not-allowed' : 'pointer'
-                    }}>
-                        <Save size={20} />
-                        {loading ? 'Publishing...' : (isEditMode ? 'Update Story' : 'Publish Story')}
-                    </button>
+                    <div className="form-actions">
+                        <button type="button" onClick={() => navigate(-1)} className="btn-cancel">
+                            <X size={18} /> Cancel
+                        </button>
+                        <button type="submit" className="btn-submit" disabled={loading}>
+                            <Save size={18} />
+                            {loading ? 'Publishing...' : (isEditMode ? 'Update Story' : 'Publish Story')}
+                        </button>
+                    </div>
 
                     <p style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center' }}>
                         💡 Supports Markdown for formatting. Images (JPG, PNG, WEBP) up to 5MB.
