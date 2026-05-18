@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Calendar, User, ArrowRight } from 'lucide-react';
+import DOMPurify from 'dompurify';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -51,7 +52,7 @@ const HomePage = () => {
                         <div className="post-content">
                             {post.tags?.[0] && <span className="post-tag">{post.tags[0]}</span>}
                             <h2 className="post-title">{post.title}</h2>
-                            <div className="post-excerpt" dangerouslySetInnerHTML={{ __html: (post.content || '').substring(0, 150) + (post.content?.length > 150 ? '...' : '') }} />
+                            <div className="post-excerpt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize((post.content || '').substring(0, 150) + (post.content?.length > 150 ? '...' : '')) }} />
 
 
                             <div className="post-footer">

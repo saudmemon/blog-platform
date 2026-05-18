@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import DOMPurify from 'dompurify';
 import { Calendar, User, Edit, Trash2, ArrowLeft } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -11,6 +12,8 @@ const PostPage = () => {
     const navigate = useNavigate();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -27,14 +30,15 @@ const PostPage = () => {
     }, [id]);
 
     const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this post?')) {
-            try {
-                await axios.delete(`${API_URL}/api/posts/${id}`);
-                navigate('/');
-            } catch (err) {
-                console.error('Error deleting post:', err);
-                alert('Failed to delete post.');
-            }
+        setDeleting(true);
+        try {
+            await axios.delete(`${API_URL}/api/posts/${id}`);
+            setShowDeleteConfirm(false);
+            navigate('/');
+        } catch (err) {
+            console.error('Error deleting post:', err);
+            alert('Failed to delete post. Please try again.');
+            setDeleting(false);
         }
     };
 
@@ -79,7 +83,7 @@ const PostPage = () => {
 
                 <div className="post-detail-body">
                     {isHtml(post.content) ? (
-                        <div className="ql-editor" dangerouslySetInnerHTML={{ __html: post.content }} />
+                        <div className="ql-editor" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
                     ) : (
                         <div className="markdown-content">
                             <ReactMarkdown>{post.content}</ReactMarkdown>
@@ -87,15 +91,60 @@ const PostPage = () => {
                     )}
                 </div>
 
-
                 <div className="post-actions">
                     <Link to={`/edit/${post._id}`} className="btn-icon btn-edit">
                         <Edit size={18} /> Edit Post
                     </Link>
-                    <button onClick={handleDelete} className="btn-icon btn-delete">
+                    <button onClick={() => setShowDeleteConfirm(true)} className="btn-icon btn-delete">
                         <Trash2 size={18} /> Delete Post
                     </button>
                 </div>
+
+                {showDeleteConfirm && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1000,
+                    }}>
+                        <div style={{
+                            backgroundColor: 'var(--bg-card)',
+                            padding: '2rem',
+                            borderRadius: '12px',
+                            maxWidth: '400px',
+                            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
+                        }}>
+                            <h2 style={{ marginBottom: '1rem', color: 'var(--text)' }}>Delete Post?</h2>
+                            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
+                                This action cannot be undone. The post and its associated image will be permanently deleted.
+                            </p>
+                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                                <button
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                    disabled={deleting}
+                                    className="btn-icon"
+                                    style={{ background: 'rgba(255,255,255,0.1)', color: 'var(--text-muted)', padding: '0.6rem 1.2rem' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleDelete}
+                                    disabled={deleting}
+                                    className="btn-icon btn-delete"
+                                    style={{ background: '#ef4444', color: 'white', padding: '0.6rem 1.2rem' }}
+                                >
+                                    {deleting ? 'Deleting...' : 'Delete'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

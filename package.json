@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "description": "Full-stack blogging platform",
     "scripts": {
-        "server": "cd server && npm run dev",
-        "client": "cd client && npm run dev",
-        "dev": "npx concurrently \"npm run server\" \"npm run client\"",
-        "build": "npm install && cd client && npm install && npm run build && cd ../server && npm install"
+        "backend": "cd backend && npm run dev",
+        "frontend": "cd frontend && npm run dev",
+        "dev": "npx concurrently \"npm run backend\" \"npm run frontend\"",
+        "build": "npm install && cd frontend && npm install && npm run build && cd ../backend && npm install"
     },
     "devDependencies": {
         "concurrently": "^9.2.1"

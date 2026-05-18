@@ -4,6 +4,15 @@ import HomePage from './pages/HomePage';
 import PostPage from './pages/PostPage';
 import EditorPage from './pages/EditorPage';
 
+// Simple 404 Not Found Component
+const NotFound = () => (
+  <div className="container" style={{ padding: '4rem', textAlign: 'center' }}>
+    <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>404</h1>
+    <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Page not found</p>
+    <a href="/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>← Back to Home</a>
+  </div>
+);
+
 function App() {
   return (
     <Router>
@@ -14,6 +23,7 @@ function App() {
           <Route path="/post/:id" element={<PostPage />} />
           <Route path="/create" element={<EditorPage />} />
           <Route path="/edit/:id" element={<EditorPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
     </Router>
