@@ -220,10 +220,6 @@ const EditorPage = () => {
                         </div>
                     </div>
 
-                    @media (max-width: 768px) {
-                        grid-template-columns: 1fr;
-                    }
-
                     <div className="form-group">
                         <label>Cover Image</label>
                         {fileError && (
